@@ -1,0 +1,62 @@
+pip install flask,jwt,jida,Flask-MySQLdb,pylint,pyjwt,flask-restx
+pip install gridfs pika flask-pymongo requests,moviepy
+pip freeze >requirements.txt
+
+kind create cluster
+
+edit the wndows/system32/drivers/etc/hosts file for cutom domain of ingress
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+
+kubectl label node <node-name> ingress-ready=true
+kubectl label node <node-name> kubernetes.io/os=linux
+
+
+set FLASK_APP=server.py  
+set FLASK_ENV=development  
+flask run 
+
+
+allow sql connection from specific host
+CREATE USER 'auth_user'@'host.docker.internal' IDENTIFIED BY 'admin321';
+GRANT ALL PRIVILEGES ON auth.* TO 'auth_user'@'host.docker.internal';
+FLUSH PRIVILEGES;
+
+
+
+
+
+kubectl port-forward svc/rabbitmq 15672:15672
+kubectl port-forward svc/gateway 8080:8080
+
+http://localhost:15672
+
+kubectl port-forward svc/mongodb 27017:27017
+DROP TABLE user;
+
+downlaod the mongossh from https://www.mongodb.com/docs/mongodb-shell/install/
+untar it tar -xf mongosh-2.3.0-win32-x64.zip
+add path "C:\Users\Dell\Downloads\mongosh-2.3.0-win32-x64"  of bin to your envs:
+then connect to mongo via
+mongosh mongodb://admin:password123@localhost:27017/?authSource=admin
+show databases;
+use videos;
+show collections;
+get the id from rabbit mq by clickjing the queue, then get messages then in mongo get collection via this command.
+db.fs.files.find({"_id" : ObjectId("66d9d9bc2a53edcb0e8f751a")})
+
+install mongodb tool guide
+https://www.mongodb.com/docs/database-tools/installation/installation-windows/
+add path to use comman 
+mongofiles --db=videos get_id --local=test.mkv  '{"$oid": "66d9d9bc2a53edcb0e8f751a"}'
+
+
+curl -X POST http://127.0.0.1:8080/upload -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhYWR1bGxhaDk0NkBnbWFpbC5jb20iLCJleHAiOjE3MjU3MjMyNDMsImlhdCI6MTcyNTYzNjg0MywiYWRtaW4iOnRydWV9.7_b76ONg9ZHsxVdsR_p3N9ANWv0L1BhlHTF4joSqFso" -F "file=@C:\Users\Dell\Downloads\video.mkv"
+
+
+curl --output mp3_test.mp3 -X GET http://127.0.0.1:8080/download?fid=66db216754d24d86d9b4adab   -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InNhYWR1bGxhaDk0NkBnbWFpbC5jb20iLCJleHAiOjE3MjU3MjMyNDMsImlhdCI6MTcyNTYzNjg0MywiYWRtaW4iOnRydWV9.7_b76ONg9ZHsxVdsR_p3N9ANWv0L1BhlHTF4joSqFso"
+
+
+
+
